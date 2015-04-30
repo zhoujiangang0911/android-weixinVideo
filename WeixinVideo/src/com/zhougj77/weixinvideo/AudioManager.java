@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import android.media.MediaRecorder;
+import android.util.Log;
 
 public class AudioManager {
 	
@@ -76,8 +77,10 @@ public class AudioManager {
 			mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 			//准备录音
 			mMediaRecorder.prepare();
+			Log.i("----zhoujg77","prepare" );
 			//开始
 			mMediaRecorder.start();
+			Log.i("----zhoujg77","start" );
 			//准备结束
 			isPrepare = true;
 			if (mListener!= null) {
@@ -122,8 +125,8 @@ public class AudioManager {
 	 *释放资源 
 	 */
 	public void release(){
-		mMediaRecorder.stop();
-		mMediaRecorder.release();
+		//mMediaRecorder.stop();
+		mMediaRecorder.reset();
 		mMediaRecorder = null;
 	}
 	

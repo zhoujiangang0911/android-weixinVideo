@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -42,8 +43,9 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 		super(context, attrs);
 		mDialogManager = new DialogManager(context);
 		
-		String dir = Environment.getExternalStorageDirectory()+"/weixinvideoasd";
-		
+		//String dir = Environment.getExternalStorageDirectory()+"/weixinvideoasd";
+		String dir = "/storage/sdcard0/weixin";
+		Log.i("----zhoujg77",dir );
 		mAudioManager = AudioManager.getInstance(dir);
 		mAudioManager.setOnAudioStateListene(this);
 		
@@ -52,14 +54,12 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 			
 			@Override
 			public boolean onLongClick(View v) {
+				Log.i("----zhoujg77","longClick" );
 				mReady = true;
 				mAudioManager.prepareAudio();
 				return false;
 			}
 		});
-		
-		
-		
 	}
 	
 	/**
@@ -106,16 +106,19 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_AUDIO_PREPARED:
+				Log.i("----zhoujg77","MSG_AUDIO_PREPARED" );
 				//显示對話框在开始录音以后
 				mDialogManager.showRecordingDialog();
 				isRecoding = true;
 				new Thread(mGetVoiceLevelRunnable).start();
 				break;
 			case MSG_VOICE_CHANGED:
+				Log.i("----zhoujg77","MSG_VOICE_CHANGED" );
 				mDialogManager.updateVoiceLevel(mAudioManager.getVoiceLevel(7));	
 				
 				break;
 			case MSG_DIALOG_DIMISS:
+				Log.i("----zhoujg77","MSG_DIALOG_DIMISS" );
 				mDialogManager.dismissDialog();
 				break;
 
@@ -144,13 +147,15 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
-					
-						changeState(STATE_RECORDING);
+			
+			Log.i("----zhoujg77","ACTION_DOWN" );
+			changeState(STATE_RECORDING);
 			
 			
 			break;
 		case MotionEvent.ACTION_MOVE:
-			if (isRecoding) {
+			Log.i("----zhoujg77","ACTION_MOVE" );
+			if (!isRecoding) {
 				//如果想要取消录音，根据X，y的坐标判断
 				if (wantToCancel(x,y)) {
 					changeState(STATE_WANT_TO_CANCEL);
@@ -162,6 +167,7 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 			
 			break;
 		case MotionEvent.ACTION_UP:
+			Log.i("----zhoujg77","ACTION_UP" );
 			if (!mReady) {
 				reset();
 				return super.onTouchEvent(event);
@@ -169,12 +175,11 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 			if (!isRecoding||mTime < 0.6f){
 				mDialogManager.tooShort();
 				mAudioManager.cancel();
-				mHandler.sendEmptyMessageDelayed(MSG_DIALOG_DIMISS,1300);//延迟显示对话框
+				mHandler.sendEmptyMessageDelayed(MSG_DIALOG_DIMISS,1000);//延迟显示对话框
 			}
 			else if (mCurState == STATE_RECORDING) {//正常录制结束
 				//释放录音资源 通知Activity
 				mDialogManager.dismissDialog();
-			
 				mAudioManager.release();
 				if (mListener != null) {
 					mListener.onFinish(mTime, mAudioManager.getCurrentFilePath());
@@ -226,10 +231,11 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 			case STATE_RECORDING:
 				setBackgroundResource(R.drawable.btn_recoding);
 				setText(R.string.str_recoder_recoding);
-				if (!isRecoding) {
+				//if (isRecoding) {
+					//mDialogManager.showRecordingDialog();
 					//更新duihuakuang
 					mDialogManager.recoding();
-				}
+			//	}
 				break;
 			case STATE_WANT_TO_CANCEL:
 				setBackgroundResource(R.drawable.btn_recoding);
