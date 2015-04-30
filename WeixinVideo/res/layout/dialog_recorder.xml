@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="20dp"
     android:gravity="center"
-    android:background="#e2e2e2"
+    android:background="@drawable/dialog_loading_bg"
    android:orientation="vertical" >
 	<LinearLayout 
 	    android:layout_width="wrap_content"
@@ -15,14 +15,14 @@
 	        android:id="@+id/image_a"
 	    	android:layout_width="wrap_content"
 	   		 android:layout_height="wrap_content"
-	    	android:src="@drawable/call_interface_hands_free"    
+	    	android:src="@drawable/recorder"    
 	        android:visibility="visible"
 	        />
 	      <ImageView 
 	           android:id="@+id/image_b"
 	    	android:layout_width="wrap_content"
 	   		 android:layout_height="wrap_content"
-	    	android:src="@drawable/call_interface_hands_free_on"    
+	    	android:src="@drawable/v1"    
 	        />
 	    
 	</LinearLayout>
