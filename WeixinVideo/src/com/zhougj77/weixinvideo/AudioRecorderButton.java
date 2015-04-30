@@ -40,7 +40,7 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 
 	public AudioRecorderButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		mDialogManager = new DialogManager(getContext());
+		mDialogManager = new DialogManager(context);
 		
 		String dir = Environment.getExternalStorageDirectory()+"/weixinvideoasd";
 		
@@ -75,12 +75,6 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 	public void setAudioFinshRecoderListener(AudioFinshRecoderListener lister){
 		mListener = lister;
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	/*
@@ -150,8 +144,10 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
-			Toast.makeText(getContext(), "11",Toast.LENGTH_LONG).show();
-			changeState(STATE_RECORDING);
+					
+						changeState(STATE_RECORDING);
+			
+			
 			break;
 		case MotionEvent.ACTION_MOVE:
 			if (isRecoding) {
@@ -230,7 +226,7 @@ public class AudioRecorderButton extends Button implements AudioStateListene {
 			case STATE_RECORDING:
 				setBackgroundResource(R.drawable.btn_recoding);
 				setText(R.string.str_recoder_recoding);
-				if (isRecoding) {
+				if (!isRecoding) {
 					//更新duihuakuang
 					mDialogManager.recoding();
 				}
